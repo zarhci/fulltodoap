@@ -64,3 +64,7 @@ port-forward:
 
 port-forward-close:
 	@docker compose down port-forwarder
+
+
+todo-run:
+	@go run cmd/main.go
