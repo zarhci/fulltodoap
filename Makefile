@@ -15,7 +15,7 @@ down:
 cleanup:
 	@read -p "Очистить все volume файлы окружения? Опастность утери данных: [y/N] " ans; \
 	if [ "$$ans" = "y" ]; then \
-		docker compose down todoapp-postgres && rm -rf out/dbeaver && \
+		docker compose down todoapp-postgres port-forwarder && rm -rf out/dbeaver && \
 		echo "Все volume файлы окружения удалены!"; \
 	else \
 		echo "Операция отменена. Volume файлы окружения сохранены."; \
@@ -68,5 +68,6 @@ port-forward-close:
 
 todo-run:
 	@export LOGGER_FOLDER=${PROJECT_ROOT}/out/logs && \
+	export POSTGRES_HOST=localhost && \
 	go mod tidy && \
 	go run cmd/main.go
