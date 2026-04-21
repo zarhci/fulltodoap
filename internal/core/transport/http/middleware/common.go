@@ -15,8 +15,6 @@ const (
 	requestIDHeader = "X-Request-ID"
 )
 
-var Log *core_logger.Logger
-
 func RequestID() Middleware {
 
 	return func(next http.Handler) http.Handler {
@@ -32,12 +30,12 @@ func RequestID() Middleware {
 	}
 }
 
-func Logger() Middleware {
+func Logger(log *core_logger.Logger) Middleware {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			requestID := r.Header.Get(requestIDHeader)
 
-			l := Log.With(
+			l := log.With(
 				zap.String("request_id", requestID),
 				zap.String("url", r.URL.String()),
 			)
@@ -80,6 +78,7 @@ func Trace() Middleware {
 
 			log.Debug(
 				"<<<< done http request",
+				zap.Int("status_code", rw.GetStatusCodeOrPanic()),
 				zap.Duration("latency", time.Since(before)),
 			)
 		})

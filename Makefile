@@ -67,4 +67,6 @@ port-forward-close:
 
 
 todo-run:
-	@go run cmd/main.go
+	@export LOGGER_FOLDER=${PROJECT_ROOT}/out/logs && \
+	go mod tidy && \
+	go run cmd/main.go

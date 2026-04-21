@@ -23,6 +23,9 @@ func (rw *ResponseWriter) WriteHeader(statusCode int) {
 	rw.statusCode = statusCode
 }
 
-func (rw *ResponseWriter) StatusCode() int {
+func (rw *ResponseWriter) GetStatusCodeOrPanic() int {
+	if rw.statusCode == StatusCodeUnitialized {
+		panic("status code not initialized")
+	}
 	return rw.statusCode
 }

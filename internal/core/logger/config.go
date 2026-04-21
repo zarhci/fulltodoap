@@ -8,7 +8,7 @@ import (
 
 type Config struct {
 	Level  string `envconfig:"LEVEL" required:"true"`
-	Folder string `envconfig:"FOLDER " required:"true"`
+	Folder string `envconfig:"FOLDER" required:"true"`
 }
 
 func NewLoggerConfig() (Config, error) {
@@ -19,7 +19,7 @@ func NewLoggerConfig() (Config, error) {
 	return config, nil
 }
 
-func NenConfigMust() Config {
+func NewConfigMust() Config {
 	config, err := NewLoggerConfig()
 	if err != nil {
 		panic(fmt.Sprintf("failed to load logger config: %v", err))
