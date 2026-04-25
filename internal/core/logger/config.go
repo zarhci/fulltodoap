@@ -22,7 +22,8 @@ func NewLoggerConfig() (Config, error) {
 func NewConfigMust() Config {
 	config, err := NewLoggerConfig()
 	if err != nil {
-		panic(fmt.Sprintf("failed to load logger config: %v", err))
+		err := (fmt.Sprintf("failed to load logger config: %v", err))
+		panic(err)
 	}
 	return config
 }

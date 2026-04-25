@@ -23,7 +23,8 @@ func NewConfig() (Config, error) {
 func NewConfigMust() Config {
 	config, err := NewConfig()
 	if err != nil {
-		panic(fmt.Sprintf("failed to load config: %v", err))
+		err := (fmt.Sprintf("failed to load config: %v", err))
+		panic(err)
 	}
 	return config
 }
