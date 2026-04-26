@@ -30,6 +30,11 @@ type UsersService interface {
 		ctx context.Context,
 		id int,
 	) (domain.User, error)
+
+	DeleteUser(
+		ctx context.Context,
+		id int,
+	) error
 }
 
 func NewUsersHandler(usersService UsersService) *UsersHandler {
@@ -56,6 +61,12 @@ func (h *UsersHandler) Router() []core_server.Route {
 			Method:  http.MethodGet,
 			Path:    "/users/{id}",
 			Handler: h.GetUser,
+		},
+
+		{
+			Method:  http.MethodDelete,
+			Path:    "/users/{id}",
+			Handler: h.DeleteUser,
 		},
 	}
 }
