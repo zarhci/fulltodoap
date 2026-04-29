@@ -16,7 +16,7 @@ func (r *UsersRepository) DeleteUser(
 
 	query := `
 	DELETE from todoapp.users
-	WHERE id=$1
+	WHERE id=$1;
 	`
 
 	cmdTag, err := r.pool.Exec(ctx, query, id)

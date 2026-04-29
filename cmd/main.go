@@ -54,8 +54,8 @@ func main() {
 		logger,
 		core_middleware.RequestID(),
 		core_middleware.Logger(logger),
-		core_middleware.PanicRecovery(),
 		core_middleware.Trace(),
+		core_middleware.PanicRecovery(),
 	)
 
 	apiVersionRouter := core_server.NewAPIVersionRouter(core_server.ApiVersionV1)
