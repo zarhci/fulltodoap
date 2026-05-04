@@ -8,6 +8,7 @@ import (
 	"syscall"
 	"time"
 
+	core_config "github.com/zarhci/fulltodoap/internal/core/config"
 	core_logger "github.com/zarhci/fulltodoap/internal/core/logger"
 	core_postgres_pool "github.com/zarhci/fulltodoap/internal/core/repository/postgres/pool"
 	core_middleware "github.com/zarhci/fulltodoap/internal/core/transport/http/middleware"
@@ -21,13 +22,10 @@ import (
 	"go.uber.org/zap"
 )
 
-var (
-	timeZone = time.UTC
-)
-
 func main() {
 
-	time.Local = timeZone
+	cfg := core_config.NewConfigMust()
+	time.Local = cfg.TimeZone
 
 	ctx, cancel := signal.NotifyContext(
 		context.Background(),
@@ -42,7 +40,7 @@ func main() {
 	}
 	defer logger.Close()
 
-	logger.Debug("application time zone", zap.Any("time_zone", timeZone))
+	logger.Debug("application time zone", zap.Any("time_zone", time.Local))
 
 	logger.Debug("Creating database connection pool")
 	pool, err := core_postgres_pool.NewConnectionPool(
