@@ -127,6 +127,17 @@ func NewTaskPatch(
 	}
 }
 
+func (t *Task) CompleteionDuraton() *time.Duration {
+	if !t.Completed || t.CompletedAt == nil {
+		return nil
+	}
+	if t.CompletedAt == nil {
+		return nil
+	}
+	duration := t.CompletedAt.Sub(t.CreatedAt)
+	return &duration
+}
+
 func (p *TaskPatch) Validate() error {
 	if p.Title.Set && p.Title.Value == nil {
 		return fmt.Errorf("title cannot be empty[patch]", core_errors.ErrInvalidArgument)

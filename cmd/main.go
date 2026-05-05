@@ -13,6 +13,9 @@ import (
 	core_postgres_pool "github.com/zarhci/fulltodoap/internal/core/repository/postgres/pool"
 	core_middleware "github.com/zarhci/fulltodoap/internal/core/transport/http/middleware"
 	core_server "github.com/zarhci/fulltodoap/internal/core/transport/http/server"
+	statistics_postgres_repository "github.com/zarhci/fulltodoap/internal/feature/statistics/repository/postgres"
+	statistics_service "github.com/zarhci/fulltodoap/internal/feature/statistics/service"
+	statistics_transport "github.com/zarhci/fulltodoap/internal/feature/statistics/transport/http"
 	tasks_postgres_repository "github.com/zarhci/fulltodoap/internal/feature/tasks/repository/postgres"
 	tasks_service "github.com/zarhci/fulltodoap/internal/feature/tasks/service"
 	tasks_transport "github.com/zarhci/fulltodoap/internal/feature/tasks/transport/http"
@@ -61,6 +64,11 @@ func main() {
 	tasksService := tasks_service.NewTaskService(tasksRepository)
 	tasksTranport := tasks_transport.NewTasksHandler(tasksService)
 
+	logger.Debug("initializing feature", zap.String("feature", "statistics"))
+	statistics_postgres_repository := statistics_postgres_repository.NewStatisticsRepository(pool)
+	statisticsService := statistics_service.NewStatisticsService(statistics_postgres_repository)
+	statisticsTransport := statistics_transport.NewStatisticsHandler(statisticsService)
+
 	users_transport_HTTP := users_transport_http.NewUsersHandler(usersService)
 
 	logger.Debug("initializing HTTP server")
@@ -76,6 +84,8 @@ func main() {
 	apiVersionRouter := core_server.NewAPIVersionRouter(core_server.ApiVersionV1)
 	apiVersionRouter.RegisterRoutes(users_transport_HTTP.Router()...)
 	apiVersionRouter.RegisterRoutes(tasksTranport.Routes()...)
+	apiVersionRouter.RegisterRoutes(statisticsTransport.Routes()...)
+
 	httpServer.RegisterAPIRoutes(apiVersionRouter)
 
 	if err := httpServer.Run(ctx); err != nil {
